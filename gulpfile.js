@@ -5,6 +5,8 @@ const gulp         = require('gulp'),
 	  sourcemaps   = require('gulp-sourcemaps'),
 	  csso         = require('gulp-csso'),
 	  uglify       = require('gulp-uglify'),
+	  imagemin     = require('gulp-imagemin'),
+	  pngquant     = require('imagemin-pngquant'),
 	  browserSync  = require('browser-sync'),
 	  del          = require('del');
 
@@ -15,8 +17,8 @@ let path = {
 	scripts: [
 		'./src/scripts/script.js'
 	],
-	images: [],
-	fonts: [],
+	images: ['./src/images/**/*.*'],
+	fonts: ['./src/fonts/**/*.*'],
 	vendor: {
 		styles: [],
 		scripts: [],
@@ -53,6 +55,22 @@ function scripts() {
 			   .pipe(browserSync.reload({stream: true}));
 }
 
+function images() {
+	return gulp.src(path.images)
+			   .pipe(imagemin({
+                    progressive: true,
+                    svgoPlugins: [{removeViewBox: false}],
+                    use: [pngquant()],
+                    interlaced: true
+                }))
+				.pipe(gulp.dest('./dist/img/'))
+}
+
+function fonts() {
+	return gulp.src(path.fonts)
+			   .pipe(gulp.dest('./dist/fonts/'))
+}
+
 function clean() {
 	return del(['./dist/*', './html/*']);
 }
@@ -74,3 +92,4 @@ gulp.task('style', styles);
 gulp.task('js', scripts);
 gulp.task('default', views);
 gulp.task('clean', clean);
+gulp.task('img', images);
