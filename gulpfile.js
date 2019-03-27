@@ -5,7 +5,8 @@ const gulp         = require('gulp'),
 	  sourcemaps   = require('gulp-sourcemaps'),
 	  csso         = require('gulp-csso'),
 	  uglify       = require('gulp-uglify'),
-	  browserSync  = require('browser-sync');
+	  browserSync  = require('browser-sync'),
+	  del          = require('del');
 
 let path = {
 	styles: [
@@ -52,6 +53,10 @@ function scripts() {
 			   .pipe(browserSync.reload({stream: true}));
 }
 
+function clean() {
+	return del(['./dist/*', './html/*']);
+}
+
 gulp.task('server', () => {
 	browserSync({
 		server: {
@@ -68,3 +73,4 @@ gulp.task('server', () => {
 gulp.task('style', styles);
 gulp.task('js', scripts);
 gulp.task('default', views);
+gulp.task('clean', clean);
