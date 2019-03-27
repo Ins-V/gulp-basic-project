@@ -5,6 +5,7 @@ const gulp         = require('gulp'),
 	  sourcemaps   = require('gulp-sourcemaps'),
 	  csso         = require('gulp-csso'),
 	  uglify       = require('gulp-uglify'),
+	  rename       = require('gulp-rename'),
 	  imagemin     = require('gulp-imagemin'),
 	  pngquant     = require('imagemin-pngquant'),
 	  browserSync  = require('browser-sync'),
@@ -41,6 +42,7 @@ function styles() {
 				   { cascade: true }
 			   ))
 			   .pipe(csso())
+			   .pipe(rename({suffix: '.min'}))
 			   .pipe(sourcemaps.write('./'))
 			   .pipe(gulp.dest('./dist/css/'))
 			   .pipe(browserSync.reload({stream: true}));
@@ -50,6 +52,7 @@ function scripts() {
 	return gulp.src(path.scripts)
 			   .pipe(sourcemaps.init())
 			   .pipe(uglify())
+			   .pipe(rename({suffix: '.min'}))
 			   .pipe(sourcemaps.write('./'))
 			   .pipe(gulp.dest('./dist/js/'))
 			   .pipe(browserSync.reload({stream: true}));
