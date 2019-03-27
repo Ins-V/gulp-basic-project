@@ -6,12 +6,14 @@ const gulp         = require('gulp'),
 	  csso         = require('gulp-csso'),
 	  uglify       = require('gulp-uglify'),
 	  rename       = require('gulp-rename'),
+	  concat       = require('gulp-concat'),
 	  imagemin     = require('gulp-imagemin'),
 	  pngquant     = require('imagemin-pngquant'),
 	  browserSync  = require('browser-sync'),
 	  del          = require('del');
 
 let path = {
+	html: './src/*.html',
 	styles: [
 		'./src/styles/style.css'
 	],
@@ -29,7 +31,7 @@ let path = {
 
 
 function views() {
-	return gulp.src('./src/*.html')
+	return gulp.src(path.html)
 		       .pipe(gulp.dest('./html/'))
 			   .pipe(browserSync.reload({stream: true}));
 }
@@ -48,6 +50,13 @@ function styles() {
 			   .pipe(browserSync.reload({stream: true}));
 }
 
+function vendor_styles() {
+	return gulp.src(['./src/styles/vendor.css'].concat(path.vendor.styles))
+			   .pipe(concat('vendor.css'))
+			   .pipe(csso())
+			   .pipe(gulp.dest('./dist/css/'))
+}
+
 function scripts() {
 	return gulp.src(path.scripts)
 			   .pipe(sourcemaps.init())
@@ -56,6 +65,13 @@ function scripts() {
 			   .pipe(sourcemaps.write('./'))
 			   .pipe(gulp.dest('./dist/js/'))
 			   .pipe(browserSync.reload({stream: true}));
+}
+
+function vendor_scripts() {
+	return gulp.src(['./src/scripts/vendor.js'].concat(path.vendor.scripts))
+			   .pipe(concat('vendor.js'))
+			   .pipe(uglify())
+			   .pipe(gulp.dest('./dist/js/'))
 }
 
 function images() {
@@ -89,6 +105,10 @@ function watch() {
 		port: 3000,
 		logPrefix: '__MY_PROJECT_NAME__'
     });
+
+	gulp.watch(path.html, views);
+	gulp.watch(path.styles, styles);
+	gulp.watch(path.scripts, scripts);
 }
 
 gulp.task('watch', watch);
