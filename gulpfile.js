@@ -7,6 +7,7 @@ const gulp         = require('gulp'),
 	  uglify       = require('gulp-uglify'),
 	  rename       = require('gulp-rename'),
 	  concat       = require('gulp-concat'),
+	  rigger       = require('gulp-rigger'),
 	  imagemin     = require('gulp-imagemin'),
 	  pngquant     = require('imagemin-pngquant'),
 	  browserSync  = require('browser-sync'),
@@ -32,6 +33,7 @@ let path = {
 
 function views() {
 	return gulp.src(path.html)
+			   .pipe(rigger())
 		       .pipe(gulp.dest('./html/'))
 			   .pipe(browserSync.reload({stream: true}));
 }
@@ -86,7 +88,7 @@ function images() {
 }
 
 function fonts() {
-	return gulp.src(path.fonts)
+	return gulp.src(path.fonts.concat(path.vendor.fonts))
 			   .pipe(gulp.dest('./dist/fonts/'));
 }
 
@@ -123,3 +125,4 @@ const build = gulp.series(
 
 gulp.task('build', gulp.series(clean, build));
 gulp.task('default', gulp.series('build', watch));
+gulp.task('clean', clean);
