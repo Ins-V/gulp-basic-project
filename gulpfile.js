@@ -3,14 +3,15 @@
 const gulp         = require('gulp'),
 	  autoprefixer = require('gulp-autoprefixer'),
 	  sourcemaps   = require('gulp-sourcemaps'),
-	  csso         = require('gulp-csso');
+	  csso         = require('gulp-csso'),
+	  uglify       = require('gulp-uglify');
 
 let path = {
 	styles: [
 		'./src/styles/style.css'
 	],
 	scripts: [
-		'./scr/scripts/script.js'
+		'./src/scripts/script.js'
 	],
 	images: [],
 	fonts: [],
@@ -39,5 +40,14 @@ function styles() {
 			   .pipe(gulp.dest('./dist/css/'));
 }
 
+function scripts() {
+	return gulp.src(path.scripts)
+			   .pipe(sourcemaps.init())
+			   .pipe(uglify())
+			   .pipe(sourcemaps.write('./'))
+			   .pipe(gulp.dest('./dist/js/'));
+}
+
 gulp.task('style', styles);
+gulp.task('js', scripts);
 gulp.task('default', views);
