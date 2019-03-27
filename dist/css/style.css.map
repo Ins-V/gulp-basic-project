@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,U,CACC,mB,CAAA,oB,CAAA,mB,CAAA,Y,CACA,S","file":"style.css","sourcesContent":[".container {\n\tdisplay: flex;\n\tcolor: red;\n}\n"]}
