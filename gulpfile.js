@@ -63,20 +63,20 @@ function images() {
                     use: [pngquant()],
                     interlaced: true
                 }))
-				.pipe(gulp.dest('./dist/img/'))
+				.pipe(gulp.dest('./dist/img/'));
 }
 
 function fonts() {
 	return gulp.src(path.fonts)
-			   .pipe(gulp.dest('./dist/fonts/'))
+			   .pipe(gulp.dest('./dist/fonts/'));
 }
 
 function clean() {
 	return del(['./dist/*', './html/*']);
 }
 
-gulp.task('server', () => {
-	browserSync({
+function watch() {
+	browserSync.init({
 		server: {
 		    baseDir: './html',
 		    routes: { '/dist': 'dist' }
@@ -85,9 +85,10 @@ gulp.task('server', () => {
 		host: 'localhost',
 		port: 3000,
 		logPrefix: '__MY_PROJECT_NAME__'
-	});
-});
+    });
+}
 
+gulp.task('watch', watch);
 gulp.task('style', styles);
 gulp.task('js', scripts);
 gulp.task('default', views);
