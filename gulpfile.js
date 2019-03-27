@@ -111,9 +111,15 @@ function watch() {
 	gulp.watch(path.scripts, scripts);
 }
 
-gulp.task('watch', watch);
-gulp.task('style', styles);
-gulp.task('js', scripts);
-gulp.task('default', views);
-gulp.task('clean', clean);
-gulp.task('img', images);
+const build = gulp.series(
+	views,
+	vendor_styles,
+	styles,
+	vendor_scripts,
+	scripts,
+	images,
+	fonts
+);
+
+gulp.task('build', gulp.series(clean, build));
+gulp.task('default', gulp.series('build', watch));
